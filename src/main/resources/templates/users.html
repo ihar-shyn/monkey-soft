@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/_layout.html">
+
+<body>
+<div layout:fragment="content">
+    <h1>List of worker monkeys</h1>
+    <table class="table">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Monkey Name</th>
+            <th scope="col">Monkey Login</th>
+            <th scope="col">Department</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="monkey : ${monkeyUserPage.content}">
+            <td th:text="${monkey.getFullName()}"/>
+            <td th:text="${monkey.getUsername()}"/>
+            <td th:text="${monkey.getDepartmentName()}"/>
+            <td>
+                <a th:href="@{user-edit/{id}(id=${monkey.getId()})}">Edit</a>
+                <a th:href="@{user-delete/{id}(id=${monkey.getId()})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <nav th:if="${monkeyUserPage.totalPages > 0}">
+        <ul class="pagination">
+            <li th:each="pageNumber : ${pageNumbers}" class="page-item">
+                <a class="page-link"
+                   th:href="@{/users(size=${monkeyUserPage.size}, page=${pageNumber})}"
+                   th:text=${pageNumber}
+                   th:class="${pageNumber==monkeyUserPage.number + 1} ? active"
+                   ></a>
+            </li>
+        </ul>
+    </nav>
+
+    <p><a class="btn btn-dark" href="/user-create">Hire new monkey</a></p>
+
+</div>
+
+
+</body>
+
+
+</html>

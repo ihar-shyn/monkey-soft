@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/_layout.html">
+
+<body>
+<div layout:fragment="content">
+    <h2>New department establishing</h2>
+    <form action="#" th:action="@{/department-create}" th:object="${department}" method="post">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="department-code">Department Code</label>
+                <input class="form-control"
+                       id="department-code"
+                       type="text"
+                       th:field="*{departmentId}"
+                       placeholder="Code"
+                       required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="department-description">Description</label>
+                <input class="form-control"
+                       id="department-description"
+                       type="text"
+                       th:field="*{description}"
+                       placeholder="Department Description"
+                       required>
+            </div>
+        </div>
+
+
+        <input class="btn btn-dark" type="submit" value="Establish!">
+    </form>
+</div>
+</body>
