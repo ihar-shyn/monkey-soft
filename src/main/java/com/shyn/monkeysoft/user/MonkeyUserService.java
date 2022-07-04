@@ -1,18 +1,18 @@
 package com.shyn.monkeysoft.user;
 
+import com.shyn.monkeysoft.department.Department;
+import com.shyn.monkeysoft.department.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,28 +20,28 @@ public class MonkeyUserService implements UserDetailsService {
 
     private final MonkeyUserRepository monkeyUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final DepartmentService departmentService;
 
     @Autowired
-    public MonkeyUserService(MonkeyUserRepository monkeyUserRepository, PasswordEncoder passwordEncoder) {
+    public MonkeyUserService(MonkeyUserRepository monkeyUserRepository, PasswordEncoder passwordEncoder, DepartmentService departmentService) {
         this.monkeyUserRepository = monkeyUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.departmentService = departmentService;
     }
 
-    public Page<MonkeyUser> findMonkeysPaginated(Pageable pageable) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<MonkeyUser> monkeyUsers = monkeyUserRepository.findAll();
-        List<MonkeyUser> result;
+    public Page<MonkeyUser> getMonkeyUsersPage(String login, String firstname, String lastname, Long departmentId, Pageable paging) {
+        String loginLike = login == null ? "%%" : "%" + login + "%";
+        String firstnameLike = firstname == null ? "%%" : "%" + firstname + "%";
+        String lastnameLike = lastname == null ? "%%" : "%" + lastname + "%";
 
-        if (monkeyUsers.size() < startItem) {
-            result = Collections.emptyList();
+        if(departmentId != null && departmentId != 0) {
+            // TODO: handle not exists departments id
+            Department department = departmentService.getDepartmentById(departmentId);
+            return monkeyUserRepository.findAllByDepartmentAndLoginLikeIgnoreCaseAndFirstNameLikeIgnoreCaseAndLastNameLikeIgnoreCase(department, loginLike, firstnameLike, lastnameLike,paging);
         } else {
-            int toIndex = Math.min(startItem + pageSize, monkeyUsers.size());
-            result = monkeyUsers.subList(startItem, toIndex);
+            return monkeyUserRepository.findAllByLoginLikeIgnoreCaseAndFirstNameLikeIgnoreCaseAndLastNameLikeIgnoreCase(loginLike, firstnameLike, lastnameLike,paging);
         }
 
-        return new PageImpl<>(result, PageRequest.of(currentPage, pageSize), monkeyUsers.size());
     }
 
     public void addMonkeyUserRaw(MonkeyUser monkeyUser) {
@@ -66,6 +66,12 @@ public class MonkeyUserService implements UserDetailsService {
         if(monkeyUserOptional.isEmpty()) {
             throw new IllegalStateException("Monkey with id " + id + " is already fired");
         }
+        MonkeyUser user = monkeyUserOptional.get();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getName().equals(user.getLogin())) {
+            throw new IllegalStateException("Can`t remove your own logged-in monkey");
+        }
 
         monkeyUserRepository.deleteById(id);
     }
@@ -88,4 +94,5 @@ public class MonkeyUserService implements UserDetailsService {
 
         return monkeyUser;
     }
+
 }

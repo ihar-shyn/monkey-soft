@@ -11,7 +11,7 @@
         <input type="hidden" th:value="${department.id}" th:field="*{id}"/>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="department-code">Department Code</label>
+                <label class="form-label" for="department-code">Department Code</label>
                 <input class="form-control"
                        id="department-code"
                        type="text"
@@ -23,7 +23,7 @@
 
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="department-description">Description</label>
+                <label class="form-label" for="department-description">Description</label>
                 <input class="form-control"
                        id="department-description"
                        type="text"
@@ -34,7 +34,7 @@
         </div>
 
 
-        <input class="btn btn-dark" type="submit" value="Save changes">
+        <input class="btn btn-dark" type="submit" value="Save changes" style="margin-top: 15px">
     </form>
 </div>
 </body>

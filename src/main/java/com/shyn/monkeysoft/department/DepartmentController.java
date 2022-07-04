@@ -60,8 +60,15 @@ public class DepartmentController {
     }
 
     @GetMapping("/department-delete/{id}")
-    public String deleteDepartment(@PathVariable("id") Long id) {
-        departmentService.deleteDepartment(id);
+    public String deleteDepartment(Model model, @PathVariable("id") Long id) {
+        try {
+            departmentService.deleteById(id);
+        } catch (IllegalStateException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            // TODO: handle pagination
+            return showDepartments(model, Optional.empty(), Optional.empty());
+        }
+
 
         return "redirect:/departments";
     }

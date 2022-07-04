@@ -1,51 +1,19 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
+<html lang="en"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/_layout.html">
+<head>
+    <script src="/js/departments-page.js"></script>
+    <script type="text/javascript" defer>
+        document.addEventListener('DOMContentLoaded', function(){
+            renderDepartmentPage(document.getElementById("root"), {baseUrl: window.origin });
+        });
+    </script>
+</head>
 
 <body>
 <div layout:fragment="content">
-    <h1>List of Departments</h1>
-    <table class="table">
-        <thead class="thead-dark">
-        <tr>
-            <th scope="col">Department Code</th>
-            <th scope="col">Department Description</th>
-            <th scope="col">Actions</th>
-            <th scope="col">Members</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="department : ${departmentsPage.content}">
-            <td th:text="${department.getDepartmentId()}"/>
-            <td th:text="${department.getDescription()}"/>
-            <td>
-                <a th:href="@{department-edit/{id}(id=${department.getId()})}">Edit</a>
-                <a th:href="@{department-delete/{id}(id=${department.getId()})}">Delete</a>
-            </td>
-            <td th:text="${department.getMonkeyUsers().size()}"/>
-        </tr>
-        </tbody>
-    </table>
-
-    <nav th:if="${departmentsPage.totalPages > 0}">
-        <ul class="pagination">
-            <li th:each="pageNumber : ${pageNumbers}" class="page-item">
-                <a class="page-link"
-                   th:href="@{/users(size=${departmentsPage.size}, page=${pageNumber})}"
-                   th:text=${pageNumber}
-                   th:class="${pageNumber==departmentsPage.number + 1} ? active"
-                ></a>
-            </li>
-        </ul>
-    </nav>
-
-    <p><a class="btn btn-dark" href="/department-create">Establish new department</a></p>
-
+    <div id="root" style="text-align: center;"></div>
 </div>
-
-
 </body>
-
-
 </html>

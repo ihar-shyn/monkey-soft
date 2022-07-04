@@ -37,7 +37,8 @@ public class DemodataService {
         MonkeyUser monkeyUser4 = new MonkeyUser("macaque_gena", passwordEncoder.encode("macaque_gena"), "Genadi", "Macaqoff", true, frontendDept);
         MonkeyUser monkeyUser5 = new MonkeyUser("marmazette_marina", passwordEncoder.encode("marmazette_marina"), "Marina", "M", true, frontendDept);
         MonkeyUser monkeyUser6 = new MonkeyUser("marmazette_sveta", passwordEncoder.encode("marmazette_sveta"), "Svetlana", "M", true, frontendDept);
+        MonkeyUser monkeyUser7 = new MonkeyUser("gibon_volodia", passwordEncoder.encode("gibon_volodia"), "Vladimir", "Dlinnolapow", true, frontendDept);
 
-        monkeyUserRepository.saveAll(List.of(monkeyUser1, monkeyUser2, monkeyUser3, monkeyUser4, monkeyUser5, monkeyUser6));
+        monkeyUserRepository.saveAll(List.of(monkeyUser1, monkeyUser2, monkeyUser3, monkeyUser4, monkeyUser5, monkeyUser6, monkeyUser7));
     }
 }

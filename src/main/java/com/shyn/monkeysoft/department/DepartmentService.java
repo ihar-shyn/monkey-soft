@@ -21,7 +21,7 @@ public class DepartmentService {
         this.departmentRepository = departmentRepository;
     }
 
-    public List<Department> getAllDepartmentsFromDB() {
+    public List<Department> getAllDepartments() {
         return departmentRepository.findAll();
     }
 
@@ -29,18 +29,18 @@ public class DepartmentService {
         departmentRepository.save(department);
     }
 
-    public String validateNewDepartment(Department department) {
-        Optional<Department> sameNameDept = departmentRepository.findDepartmentByDepartmentId(department.getDepartmentId());
-        return null;
-
-    }
-
-    public void deleteDepartment(Long departmentKey) {
+    public void deleteById(Long departmentKey) {
         Optional<Department> optDept = departmentRepository.findDepartmentById(departmentKey);
         if(optDept.isEmpty()) {
             throw new IllegalStateException("Department with key = " + departmentKey + " is not exists");
         }
-        optDept.ifPresent(departmentRepository::delete);
+        Department department = optDept.get();
+
+        if(department.getMonkeyUsers().size() > 0) {
+            throw new IllegalStateException("Can`t remove department where still working monkeys!");
+        }
+
+        departmentRepository.delete(department);
     }
 
     public Page<Department> findDepartmentsPaginated(Pageable pageable) {
@@ -67,6 +67,13 @@ public class DepartmentService {
         }
 
         return optDept.get();
+    }
+
+    public Page<Department> getDepartmentsBySearchParams(String departmentCode, String departmentDesc, Pageable paging) {
+        String departmentCodeLike = departmentCode == null ? "%%" : "%" + departmentCode + "%";
+        String departmentDescLike = departmentDesc == null ? "%%" : "%" + departmentDesc + "%";
+
+        return departmentRepository.findAllByDepartmentIdLikeIgnoreCaseAndDescriptionLikeIgnoreCase(departmentCodeLike, departmentDescLike, paging);
     }
 
 }

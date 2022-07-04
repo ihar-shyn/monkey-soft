@@ -25,7 +25,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                .headers().frameOptions().disable()
                .and()
                .authorizeRequests()
-               .antMatchers("/css/*", "/js/*", "/images/*", "/h2/*")
+               .antMatchers("/css/*", "/js/*", "/images/*", "/h2/*", "/api/*")
                .permitAll()
                .anyRequest()
                .authenticated()
@@ -54,6 +54,8 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         provider.setUserDetailsService(monkeyUserService);
         return provider;
     }
+
+
 
 
 }

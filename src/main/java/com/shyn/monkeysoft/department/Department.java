@@ -1,5 +1,6 @@
 package com.shyn.monkeysoft.department;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shyn.monkeysoft.user.MonkeyUser;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Department {
             mappedBy = "department",
             cascade = CascadeType.ALL
     )
+    @JsonIgnore
     private List<MonkeyUser> monkeyUsers = new ArrayList<>();
 
     public Department() {
