@@ -1,18 +1,25 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/_layout.html">
 
 <body>
 <div layout:fragment="content">
-    <h2>Editing monkey-worker</h2>
-    <form action="#" th:action="@{/user-edit}" th:object="${monkeyUser}" method="post">
+    <h2>New monkey-worker hiring</h2>
+    <form action="#" th:action="@{/user}" th:object="${monkeyUser}" method="post">
         <input type="hidden" th:value="${monkeyUser.id}" th:field="*{id}"/>
         <div class="form-row">
             <div class="form-group col-md-6">
-                <label for="login">Login</label>
+                <label class="form-label" for="login">Login</label>
                 <input class="form-control" id="login" type="text" th:field="*{login}" placeholder="login">
+            </div>
+        </div>
+
+        <div class="form-row" th:if="${monkeyUser.id == null}">
+            <div class="form-group col-md-6">
+                <label class="form-label" for="password">Password</label>
+                <input class="form-control" id="password" type="text" th:field="*{password}" placeholder="password">
             </div>
         </div>
 
@@ -40,7 +47,7 @@
             </div>
         </div>
 
-        <input class="btn btn-dark" type="submit" value="Save changes" style="margin-top: 15px">
+        <input class="btn btn-dark" type="submit" th:value="${monkeyUser.id} ? 'Edit' : 'Hire'" style="margin-top: 15px">
 
     </form>
 </div>

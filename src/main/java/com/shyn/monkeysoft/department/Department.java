@@ -2,6 +2,9 @@ package com.shyn.monkeysoft.department;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shyn.monkeysoft.user.MonkeyUser;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +12,9 @@ import java.util.List;
 
 @Entity
 @Table
+@Getter
+@Setter
+@ToString(exclude = "monkeyUsers")
 public class Department {
 
     @Id
@@ -32,6 +38,7 @@ public class Department {
             cascade = CascadeType.ALL
     )
     @JsonIgnore
+    @Getter
     private List<MonkeyUser> monkeyUsers = new ArrayList<>();
 
     public Department() {
@@ -40,45 +47,5 @@ public class Department {
     public Department(String departmentId, String description) {
         this.departmentId = departmentId;
         this.description = description;
-    }
-
-    public String getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long key) {
-        this.id = key;
-    }
-
-    public List<MonkeyUser> getMonkeyUsers() {
-        return monkeyUsers;
-    }
-
-    public void setMonkeyUsers(List<MonkeyUser> monkeyUsers) {
-        this.monkeyUsers = monkeyUsers;
-    }
-
-    @Override
-    public String toString() {
-        return "Department{" +
-                "departmentId='" + departmentId + '\'' +
-                ", description='" + description + '\'' +
-                '}';
     }
 }

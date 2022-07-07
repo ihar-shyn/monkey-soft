@@ -30,9 +30,9 @@ public class MonkeyUserService implements UserDetailsService {
     }
 
     public Page<MonkeyUser> getMonkeyUsersPage(String login, String firstname, String lastname, Long departmentId, Pageable paging) {
-        String loginLike = login == null ? "%%" : "%" + login + "%";
-        String firstnameLike = firstname == null ? "%%" : "%" + firstname + "%";
-        String lastnameLike = lastname == null ? "%%" : "%" + lastname + "%";
+        String loginLike = login == null ? "%" : "%" + login + "%";
+        String firstnameLike = firstname == null ? "%" : "%" + firstname + "%";
+        String lastnameLike = lastname == null ? "%" : "%" + lastname + "%";
 
         if(departmentId != null && departmentId != 0) {
             // TODO: handle not exists departments id
@@ -44,9 +44,8 @@ public class MonkeyUserService implements UserDetailsService {
 
     }
 
-    public void addMonkeyUserRaw(MonkeyUser monkeyUser) {
-        monkeyUser.setEnabled(true);
-        // TODO: encode password on front?
+    public void addNewMonkeyUser(MonkeyUser monkeyUser) {
+        monkeyUser.setIsEnabled(true);
         String rawPassword = monkeyUser.getPassword();
         monkeyUser.setPassword(passwordEncoder.encode(rawPassword));
         monkeyUserRepository.save(monkeyUser);
@@ -80,7 +79,7 @@ public class MonkeyUserService implements UserDetailsService {
         //TODO: In more elegant way handle pass?
         MonkeyUser objectFromDB = findMonkeyById(monkeyUser.getId());
         monkeyUser.setPassword(objectFromDB.getPassword());
-        monkeyUser.setEnabled(true);
+        monkeyUser.setIsEnabled(true);
 
         monkeyUserRepository.save(monkeyUser);
     }
