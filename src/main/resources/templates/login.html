@@ -1,4 +1,5 @@
-<html lang="en"><head>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -6,23 +7,48 @@
     <title>Welcome to Monkey Soft</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/signing.css" rel="stylesheet">
+    <script src="/js/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+
 <div class="container">
     <form class="form-signin form-signin--custom" method="post" action="/login">
-        <h2 class="form-signin-heading form-signin-heading--custom">Welcome to Monkey Soft</h2>
-<!--        TODO: add local image-->
+        <h2 class="form-signin-heading form-signin-heading--custom" th:text="#{welcome}"></h2>
+        <div style="align-content: center">
+            <span th:text="#{langChange}"></span>:
+            <select id="locales">
+                <option value=""></option>
+                <option value="be" th:text="By" th:selected="(${locale} == 'be')"></option>
+                <option value="en" th:text="En" th:selected="(${locale} == 'en')"></option>
+                <option value="pl" th:text="Pl" th:selected="(${locale} == 'pl')"></option>
+            </select>
+        </div>
+        <span th:value="${locale}"></span>
         <img class="form-signin__logo" src="/images/monkey-soft-logo.jpg"/>
         <p>
-            <label for="username" class="sr-only">Username</label>
-            <input type="text" id="username" name="username" class="form-control" placeholder="Username" required="" autofocus="">
+            <label for="username" class="sr-only" th:text="#{username}"></label>
+            <input type="text" id="username" name="username" class="form-control" th:placeholder="#{username}" required=""
+                   autofocus="">
         </p>
         <p>
-            <label for="password" class="sr-only">Password</label>
-            <input type="password" id="password" name="password" class="form-control" placeholder="Password" required="">
+            <label for="password" class="sr-only" th:text="#{password}"></label>
+            <input type="password" id="password" name="password" class="form-control" th:placeholder="#{password}"
+                   required="">
         </p>
-        <input name="_csrf" type="hidden" value="9fbcc9bc-1c1d-4b53-bcd5-e49af7f26982">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        </div>
     </form>
 </div>
-</body></html>
+</body>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#locales').change(function () {
+            const selectedLocale = $('#locales').val();
+            if (selectedLocale) {
+                window.location.replace('?lang=' + selectedLocale);
+            }
+        })
+    });
+</script>
+</html>
